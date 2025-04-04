@@ -4,7 +4,7 @@ services:
   sqlnode1:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlnode1
-    hostname: sqlnode1  # 👈 nombre real de la instancia
+    hostname: sqlnode1  
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MewVmax.1
@@ -21,7 +21,7 @@ services:
   sqlnode2:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlnode2
-    hostname: sqlnode2  # 👈 nombre real de la instancia
+    hostname: sqlnode2 
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MewVmax.1
