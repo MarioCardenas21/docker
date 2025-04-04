@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  sqlnode1:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlnode1
+    hostname: sqlnode1  # 👈 nombre real de la instancia
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MewVmax.1
+      - MSSQL_AGENT_ENABLED=true
+      - MSSQL_ENABLE_HADR=1
+    ports:
+      - "1433:1433"
+    networks:
+      - sqlnet
+    volumes:
+      - sql1data:/var/opt/mssql
+    restart: unless-stopped
+
+  sqlnode2:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlnode2
+    hostname: sqlnode2  # 👈 nombre real de la instancia
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MewVmax.1
+      - MSSQL_AGENT_ENABLED=true
+      - MSSQL_ENABLE_HADR=1
+    ports:
+      - "1434:1433"
+    networks:
+      - sqlnet
+    volumes:
+      - sql2data:/var/opt/mssql
+    restart: unless-stopped
+
+networks:
+  sqlnet:
+    driver: bridge
+
+volumes:
+  sql1data:
+  sql2data:
+
