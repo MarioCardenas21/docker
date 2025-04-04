@@ -4,7 +4,7 @@ services:
   sqlnode1:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlnode1
-    hostname: sqlnode1  
+    hostname: sqlnode1
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MewVmax.1
@@ -21,7 +21,7 @@ services:
   sqlnode2:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlnode2
-    hostname: sqlnode2 
+    hostname: sqlnode2
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MewVmax.1
@@ -33,6 +33,49 @@ services:
       - sqlnet
     volumes:
       - sql2data:/var/opt/mssql
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    networks:
+      - sqlnet
+    restart: unless-stopped
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - sqlnet
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - sqlnet
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - sqlnet
     restart: unless-stopped
 
 networks:
